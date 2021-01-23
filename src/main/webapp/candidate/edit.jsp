@@ -1,6 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="dream.store.Store" %>
 <%@ page import="dream.model.Candidate" %>
+<%
+    String id = request.getParameter("id");
+    Candidate candidate = new Candidate(0, "");
+    if (id != null) {
+        candidate = Store.instOf().findCandidateById(Integer.valueOf(id));
+    }
+%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -28,7 +35,7 @@
                 Новое резюме.
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/candidate/save" method="post">
+                <form action="<%=request.getContextPath()%>/candidate/save?id=<%=candidate.getId()%>" method="post">
                     <div class="form-group">
                         <label>Имя</label>
                         <input type="text" class="form-control" name="name">

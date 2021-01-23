@@ -6,7 +6,7 @@
     String id = request.getParameter("id");
     Post post = new Post(0, "");
     if (id != null) {
-        post = Store.instOf().findById(Integer.valueOf(id));
+        post = Store.instOf().findPostById(Integer.valueOf(id));
     }
 %>
 <!doctype html>
