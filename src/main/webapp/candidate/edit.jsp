@@ -32,13 +32,17 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Новое резюме.
+                <% if (id == null) { %>
+                Новая резюме.
+                <% } else { %>
+                Редактирование резюме.
+                <% } %>
             </div>
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/candidate/save?id=<%=candidate.getId()%>" method="post">
                     <div class="form-group">
                         <label>Имя</label>
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" name="name" value="<%=candidate.getName()%>">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
