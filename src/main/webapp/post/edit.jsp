@@ -1,12 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="dream.store.MemStore" %>
 <%@ page import="dream.model.Post" %>
+<%@ page import="dream.store.PsqlStore" %>
 
 <%
     String id = request.getParameter("id");
     Post post = new Post(0, "");
     if (id != null) {
-        post = MemStore.instOf().findPostById(Integer.valueOf(id));
+        post = PsqlStore.instOf().findPostById(Integer.parseInt(id));
     }
 %>
 <!doctype html>

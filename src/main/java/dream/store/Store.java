@@ -10,8 +10,8 @@ public interface Store {
 
     Collection<Candidate> findAllCandidates();
 
-    void save(Post post) throws Exception;
-    void save(Candidate post) throws Exception;
+    void save(Post post);
+    void save(Candidate post);
 
     Post findPostById(int id);
     Candidate findCandidateById(int id);
