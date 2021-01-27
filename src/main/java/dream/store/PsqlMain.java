@@ -3,7 +3,23 @@ package dream.store;
 import dream.model.Candidate;
 import dream.model.Post;
 
+import java.io.InputStream;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 public class PsqlMain {
+
+    static Logger LOGGER;
+
+    static {
+        try (InputStream ins = PsqlMain.class.getClassLoader().getResourceAsStream("logger.properties")) {
+            LogManager.getLogManager().readConfiguration(ins);
+            LOGGER = Logger.getLogger(PsqlMain.class.getName());
+        } catch (Exception ignore) {
+            ignore.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         Store store = PsqlStore.instOf();
         try {
@@ -13,7 +29,7 @@ public class PsqlMain {
             }
 
             Post findByidPost = store.findPostById(1);
-            System.out.printf("post find by id:  %d %s\n",findByidPost.getId(), findByidPost.getName());
+            System.out.printf("post find by id:  %d %s\n", findByidPost.getId(), findByidPost.getName());
 
             findByidPost.setName("Updated Post");
             store.save(findByidPost);
@@ -32,7 +48,7 @@ public class PsqlMain {
             store.save(findByidCandidate);
             System.out.printf("candidate update id:  %d %s\n", findByidCandidate.getId(), findByidCandidate.getName());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.warning(e.getMessage());
         }
     }
 }
