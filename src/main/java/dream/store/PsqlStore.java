@@ -52,8 +52,9 @@ public class PsqlStore implements Store {
     @Override
     public Collection<Post> findAllPosts() {
         List<Post> posts = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post")
+        try (
+                Connection cn = pool.getConnection();
+                PreparedStatement ps = cn.prepareStatement("SELECT * FROM post")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -69,8 +70,9 @@ public class PsqlStore implements Store {
     @Override
     public Collection<Candidate> findAllCandidates() {
         List<Candidate> candidates = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")
+        try (
+                Connection cn = pool.getConnection();
+                PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -102,8 +104,9 @@ public class PsqlStore implements Store {
     }
 
     private Post create(Post post) {
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
+        try (
+                Connection cn = pool.getConnection();
+                PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
             ps.execute();
@@ -120,7 +123,8 @@ public class PsqlStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (
-                PreparedStatement ps = pool.getConnection().prepareStatement("INSERT INTO candidate(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
+                Connection con = pool.getConnection();
+                PreparedStatement ps = con.prepareStatement("INSERT INTO candidate(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
             ps.execute();
@@ -136,7 +140,10 @@ public class PsqlStore implements Store {
     }
 
     private void update(Post post) {
-        try (PreparedStatement statement = pool.getConnection().prepareStatement("UPDATE post SET name = ? WHERE id = ?")) {
+        try (
+                Connection con = pool.getConnection();
+                PreparedStatement statement = con.prepareStatement("UPDATE post SET name = ? WHERE id = ?")
+        ) {
             statement.setString(1, post.getName());
             statement.setInt(2, post.getId());
             statement.executeUpdate();
@@ -147,7 +154,10 @@ public class PsqlStore implements Store {
     }
 
     private void update(Candidate candidate) {
-        try (PreparedStatement statement = pool.getConnection().prepareStatement("UPDATE candidate SET name = ? WHERE id = ?")) {
+        try (
+                Connection con = pool.getConnection();
+                PreparedStatement statement = con.prepareStatement("UPDATE candidate SET name = ? WHERE id = ?")
+        ) {
             statement.setString(1, candidate.getName());
             statement.setInt(2, candidate.getId());
             statement.executeUpdate();
@@ -159,9 +169,9 @@ public class PsqlStore implements Store {
 
     @Override
     public Post findPostById(int id) {
-
         try (
-                PreparedStatement ps = pool.getConnection().prepareStatement("SELECT id, name FROM post WHERE post.id=(?)")
+                Connection con = pool.getConnection();
+                PreparedStatement ps = con.prepareStatement("SELECT id, name FROM post WHERE post.id=(?)")
         ) {
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
@@ -179,7 +189,8 @@ public class PsqlStore implements Store {
     @Override
     public Candidate findCandidateById(int id) {
         try (
-                PreparedStatement ps = pool.getConnection().prepareStatement("SELECT id, name FROM candidate WHERE id=(?)")
+                Connection con = pool.getConnection();
+                PreparedStatement ps = con.prepareStatement("SELECT id, name FROM candidate WHERE id=(?)")
         ) {
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
