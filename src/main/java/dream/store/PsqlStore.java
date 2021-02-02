@@ -175,10 +175,10 @@ public class PsqlStore implements Store {
         ) {
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
-            result.next();
 
-            return new Post(result.getInt(1), result.getString(2));
-
+            if (result.next()) {
+                return new Post(result.getInt(1), result.getString(2));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -194,9 +194,10 @@ public class PsqlStore implements Store {
         ) {
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
-            result.next();
 
-            return new Candidate(result.getInt(1), result.getString(2));
+            if (result.next()) {
+                return new Candidate(result.getInt(1), result.getString(2));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
