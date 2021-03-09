@@ -9,12 +9,12 @@ import java.util.logging.Logger;
 
 public class PsqlMain {
 
-    static Logger LOGGER;
+    static Logger logger;
 
     static {
         try (InputStream ins = PsqlMain.class.getClassLoader().getResourceAsStream("logger.properties")) {
             LogManager.getLogManager().readConfiguration(ins);
-            LOGGER = Logger.getLogger(PsqlMain.class.getName());
+            logger = Logger.getLogger(PsqlMain.class.getName());
         } catch (Exception ignore) {
             ignore.printStackTrace();
         }
@@ -48,7 +48,7 @@ public class PsqlMain {
             store.save(findByidCandidate);
             System.out.printf("candidate update id:  %d %s\n", findByidCandidate.getId(), findByidCandidate.getName());
         } catch (Exception e) {
-            LOGGER.warning(e.getMessage());
+            logger.warning(e.getMessage());
         }
     }
 }

@@ -15,4 +15,8 @@ public interface Store {
 
     Post findPostById(int id);
     Candidate findCandidateById(int id);
+
+    int registerPhotoID(int canId);
+
+    void deleteCandidateByID(int canID);
 }

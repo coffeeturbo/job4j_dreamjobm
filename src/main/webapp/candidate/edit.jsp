@@ -1,19 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="dream.store.PsqlStore" %>
-<%@ page import="dream.model.Candidate" %>
-<%
-    String id = request.getParameter("id");
-    Candidate candidate = new Candidate(0, "");
-    if (id != null) {
-        candidate = PsqlStore.instOf().findCandidateById(Integer.parseInt(id));
-    }
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
+
 <!doctype html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <c:set var="id" value="${requestScope.candidate.id}" scope="session"/>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -24,7 +19,7 @@
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <title>Работа мечты</title>
 </head>
 <body>
@@ -32,20 +27,37 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                <% if (id == null) { %>
-                Новая резюме.
-                <% } else { %>
-                Редактирование резюме.
-                <% } %>
+                <c:if test="${requestScope.candidate.id == 0}">
+                    Новый кандидат.
+                </c:if>
+                <c:if test="${requestScope.candidate.id != 0}">
+                    Редактирование кандидата.
+                </c:if>
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/candidate/save?id=<%=candidate.getId()%>" method="post">
+                <c:if test="${requestScope.candidate.id != 0}">
+
+                    <a href="<c:url value='/candidate/editAvatar.do?id=${candidate.id}' />">
+                        <c:if test="${candidate.photoId == 0}">
+                            <i class="fa fa-user mr-5 fa-5x"></i>
+                        </c:if>
+                        <c:if test="${candidate.photoId != 0}">
+                            <img src="<c:url value='/candidate/download.do?id=${requestScope.candidate.id}' />" width="200px" height="200px"/>
+                        </c:if>
+                    </a>
+                </c:if>
+                <form action="<c:url value="/candidates.do?id=${requestScope.candidate.id}"/>" method="post">
                     <div class="form-group">
-                        <label>Имя</label>
-                        <input type="text" class="form-control" name="name" value="<%=candidate.getName()%>">
+                        <label for="nameInput">Имя</label>
+                        <input id="nameInput" type="text" class="form-control" name="name" value="${requestScope.candidate.name}">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
+                <c:if test="${requestScope.candidate.id != 0}">
+                    <form action="delete.do?id=${requestScope.candidate.id}" method="post">
+                        <button type="submit" class="btn btn-primary">Удалить кандидата</button>
+                    </form>
+                </c:if>
             </div>
         </div>
     </div>

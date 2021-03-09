@@ -1,12 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 
 <!doctype html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
-    <%@page contentType="text/html; charset=UTF-8" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -18,38 +18,33 @@
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Работа мечты!</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <title>Работа мечты</title>
 </head>
 <body>
 <div class="container pt-3">
-
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Вакансии
+                    Редактирование фото.
             </div>
             <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Названия</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${posts}" var="post">
-                        <tr>
-                            <td>
-                                <a href='<c:url value="/post/edit.do?id=${post.id}"/>'>
-                                    <i class="fa fa-edit mr-3"></i>
-                                </a>
-                                <c:out value="${post.name}"/>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                <a href="<c:url value='/candidate/download.do?id=${candidate.id}'/>">
+                    <c:if test="${candidate.photoId == 0}">
+                        <i class="fa fa-user mr-5 fa-5x"></i>
+                    </c:if>
+                    <c:if test="${candidate.photoId != 0}">
+                        <img src="<c:url value='/candidate/download.do?id=${candidate.id}' />" width="300px" height="300px"/>
+                    </c:if>
+                </a>
             </div>
+            <form action="<c:url value='/candidate/upload.do?id=${sessionScope.id}'/>" method="post" enctype="multipart/form-data">
+                <div class="checkbox">
+                    <input type="file" name="file">
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
         </div>
     </div>
 </div>

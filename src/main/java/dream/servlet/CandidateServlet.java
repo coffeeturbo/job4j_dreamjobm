@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 
 public class CandidateServlet extends HttpServlet {
     @Override
@@ -19,7 +20,9 @@ public class CandidateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
+
+        Collection<Candidate> candidates = PsqlStore.instOf().findAllCandidates();
+        req.setAttribute("candidates", candidates);
         req.getRequestDispatcher("candidates.jsp").forward(req, resp);
     }
 }
