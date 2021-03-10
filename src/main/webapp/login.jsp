@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="dream.model.Candidate" %>
-<%@ page import="dream.store.PsqlStore" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,6 +21,8 @@
 </head>
 <body>
 <div class="container pt-3">
+    <%--    NAVIGATION INCLUDE--%>
+    <%@include file="include/navigation.jsp" %>
 
     <div class="row">
         <div class="card" style="width: 100%">

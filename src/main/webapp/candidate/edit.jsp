@@ -24,6 +24,8 @@
 </head>
 <body>
 <div class="container pt-3">
+    <%--    NAVIGATION INCLUDE--%>
+    <%@include file="../include/navigation.jsp" %>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
