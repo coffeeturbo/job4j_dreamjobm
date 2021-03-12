@@ -2,6 +2,7 @@ package dream.store;
 
 import dream.model.Candidate;
 import dream.model.Post;
+import dream.model.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.BufferedReader;
@@ -145,6 +146,26 @@ public class PsqlStore implements Store {
         return candidate;
     }
 
+    private User create(User user) {
+        try (
+                Connection con = pool.getConnection();
+                PreparedStatement ps = con.prepareStatement("INSERT INTO candidate(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     private void update(Post post) {
         try (
                 Connection con = pool.getConnection();
@@ -166,6 +187,20 @@ public class PsqlStore implements Store {
         ) {
             statement.setString(1, candidate.getName());
             statement.setInt(2, candidate.getId());
+            statement.executeUpdate();
+
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    private void update(User user) {
+        try (
+                Connection con = pool.getConnection();
+                PreparedStatement statement = con.prepareStatement("UPDATE user SET name = ? WHERE id = ?")
+        ) {
+            statement.setString(1, user.getName());
+            statement.setInt(2, user.getId());
             statement.executeUpdate();
 
         } catch (Exception throwables) {
@@ -268,6 +303,62 @@ public class PsqlStore implements Store {
 
         deletePhotoID(photoID);
         deletePhotoFromDisc(photoID);
+    }
+
+    @Override
+    public Collection<User> findAllUsers() {
+        List<User> users = new ArrayList<>();
+        try (
+                Connection cn = pool.getConnection();
+                PreparedStatement ps = cn.prepareStatement("SELECT * FROM user")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    users.add(new User(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("email"),
+                            it.getString("password")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    @Override
+    public void save(User user) {
+        if (user.getId() == 0) {
+            create(user);
+        } else {
+            update(user);
+        }
+    }
+
+    @Override
+    public User findUserById(int id) {
+        try (
+                Connection con = pool.getConnection();
+                PreparedStatement ps = con.prepareStatement("SELECT * FROM user WHERE id=(?)")
+        ) {
+            ps.setInt(1, id);
+            ResultSet result = ps.executeQuery();
+
+            if (result.next()) {
+                return new User(
+                        result.getInt("id"),
+                        result.getString("name"),
+                        result.getString("email"),
+                        result.getString("password")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private void deletePhotoID(int photoID) {

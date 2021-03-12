@@ -2,6 +2,7 @@ package dream.store;
 
 import dream.model.Candidate;
 import dream.model.Post;
+import dream.model.User;
 
 import java.util.Collection;
 import java.util.Map;
@@ -12,8 +13,8 @@ public class MemStore implements Store {
     private static final MemStore INST = new MemStore();
 
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
-
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
+    private final Map<Integer, User> users = new ConcurrentHashMap<>();
 
     private static AtomicInteger postId = new AtomicInteger(4);
 
@@ -24,6 +25,8 @@ public class MemStore implements Store {
         candidates.put(1, new Candidate(1, "Junior Java"));
         candidates.put(2, new Candidate(2, "Middle Java"));
         candidates.put(3, new Candidate(3, "Senior Java"));
+        users.put(1, new User(1, "name", "mem@mem", "1234"));
+        users.put(2, new User(2, "name2", "mem2@mem", "1234"));
     }
 
     public static MemStore instOf() {
@@ -67,7 +70,26 @@ public class MemStore implements Store {
 
     @Override
     public void deleteCandidateByID(int canID) {
-
+        candidates.remove(canID);
     }
 
+    @Override
+    public Collection<User> findAllUsers() {
+        return users.values();
+    }
+
+    @Override
+    public void save(User user) {
+
+        if (user.getId() == 0) {
+            user.setId(postId.incrementAndGet());
+        }
+
+        users.put(user.getId(), user);
+    }
+
+    @Override
+    public User findUserById(int id) {
+        return users.get(id);
+    }
 }
