@@ -1,6 +1,7 @@
 package dream.servlet;
 
 import dream.model.User;
+import dream.store.PsqlStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,15 +16,14 @@ public class AuthServlet extends HttpServlet {
 
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        if ("root@local".equals(email) && "root".equals(password)) {
+
+        User user = PsqlStore.instOf().findUserByEmail(email);
+
+        if (user != null && user.getPassword().equals(password)) {
             HttpSession ses = req.getSession();
-            User admin = new User();
-            admin.setId(1);
-            admin.setName("Admin");
-            admin.setEmail(email);
-            ses.setAttribute("user", admin);
+            ses.setAttribute("user", user);
             resp.sendRedirect(req.getContextPath() + "/posts.do");
-        } else {
+        }  else {
             req.setAttribute("error", "Не верный email или пароль");
             req.getRequestDispatcher("login.jsp").forward(req, resp);
         }

@@ -361,6 +361,30 @@ public class PsqlStore implements Store {
         return null;
     }
 
+    @Override
+    public User findUserByEmail(String email) {
+        try (
+                Connection con = pool.getConnection();
+                PreparedStatement ps = con.prepareStatement("SELECT * FROM user WHERE email=(?)")
+        ) {
+            ps.setString(1, email);
+            ResultSet result = ps.executeQuery();
+
+            if (result.next()) {
+                return new User(
+                        result.getInt("id"),
+                        result.getString("name"),
+                        result.getString("email"),
+                        result.getString("password")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private void deletePhotoID(int photoID) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps =  cn.prepareStatement(

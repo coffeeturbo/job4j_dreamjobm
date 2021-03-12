@@ -18,6 +18,7 @@ public interface Store {
     Post findPostById(int id);
     Candidate findCandidateById(int id);
     User findUserById(int id);
+    User findUserByEmail(String email);
 
     int registerPhotoID(int canId);
 
