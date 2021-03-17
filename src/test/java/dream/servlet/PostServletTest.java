@@ -21,8 +21,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(PowerMockRunner.class)
@@ -44,6 +43,9 @@ public class PostServletTest {
         Mockito.when(PsqlStore.instOf()).thenReturn(mockStore);
 
         postServlet.doGet(request, response);
+
+        verify(request, times(1)).getRequestDispatcher("posts.jsp");
+
         Collection<Post> posts = PsqlStore.instOf().findAllPosts();
 
         MatcherAssert.assertThat(posts.size(), Matchers.is(3));
@@ -65,6 +67,7 @@ public class PostServletTest {
         Mockito.when(PsqlStore.instOf()).thenReturn(mockStore);
 
         postServlet.doPost(request, response);
+        verify(request, times(1)).getRequestDispatcher(request.getContextPath() + "/posts.do");
         Post addedPost = PsqlStore.instOf().findPostById(200);
 
         MatcherAssert.assertThat(addedPost.getName(), Matchers.is(postName));
