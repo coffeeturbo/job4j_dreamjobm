@@ -10,7 +10,7 @@
     <script>
         function validate() {
 
-            var fields = [
+            let fields = [
                 "#name",
                 "#surname",
                 "#description"
@@ -18,20 +18,20 @@
 
             fields.forEach(function (value) {
                 var val = $(value).val();
-                if(val == '') {
+                if (val == '') {
                     alert("Поле \"" + $(value).attr('title') + "\" Не должно быть пустым");
                 }
             });
 
 
-            if( checkRadio() === false) {
+            if (checkRadio() === false) {
                 alert("Поле \"Пол\" Не должно быть пустым");
             }
 
             function checkRadio() {
-                var rsl = false;
+                let rsl = false;
                 $("#gender input").each(function (i, data) {
-                    if($(data).prop("checked")) {
+                    if ($(data).prop("checked")) {
                         rsl = true
                     }
                 });
@@ -39,6 +39,35 @@
             };
 
             return false;
+        }
+
+
+        function addRow() {
+            validate();
+
+            let name = $('#name').val();
+            let surname = $('#surname').val();
+            let gender = findActiveGenderValue();
+            let description = $('#description').val();
+
+            $("table tr:last").after(
+                "<tr> <td>" + name + "</td><td>"
+                + surname + "</td><td>"
+                + gender + "</td><td>"
+                + description + "</td></tr>"
+            )
+
+            return false
+        }
+
+        function findActiveGenderValue() {
+            let gender;
+            $("#gender input").each(function (i, data) {
+                if ($(data).prop("checked")) {
+                    gender = $(data).val();
+                }
+            });
+            return gender;
         }
     </script>
 </head>
@@ -60,10 +89,10 @@
             <label for="gender">Пол:</label>
             <div id="gender">
                 <div class="radio">
-                    <label><input type="radio" name="gender" value="male"  >Мужчина</label>
+                    <label><input type="radio" name="gender" value="Мужчина">Мужчина</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="gender" value="female">Женщина</label>
+                    <label><input type="radio" name="gender" value="Женщина">Женщина</label>
                 </div>
             </div>
         </div>
@@ -72,8 +101,27 @@
             <label for="description">Описание:</label>
             <textarea class="form-control" rows="5" id="description" title="Описание"></textarea>
         </div>
-        <button type="submit" class="btn btn-default" onclick="return validate();">Submit</button>
+        <button type="submit" class="btn btn-default" onclick="return addRow();">Submit</button>
     </form>
+
+    <table id='table' class="table">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Пол</th>
+            <th>Описание</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Вячеслав</td>
+            <td>Декабристов</td>
+            <td>М</td>
+            <td>Описание</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
