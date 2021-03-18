@@ -8,17 +8,17 @@
     <title>AJAX</title>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
     function sendGreeting() {
         $.ajax({
             type: 'GET',
             url: 'http://localhost:8080/job4j_dreamjobm_war_exploded/greet',
             data: 'name=' + $('#exampleInputEmail1').val(),
-            dataType: 'text'
-        }).done(function(data) {
-            $("#labelEmail").text(data);
-        }).fail(function(err){
+            dataType: 'json'
+        }).done(function (data) {
+            $("#labelEmail").text(data.name);
+        }).fail(function (err) {
             alert(err);
         });
     }
@@ -27,7 +27,8 @@
     <form>
         <div class="form-group">
             <label for="exampleInputEmail1" id="labelEmail">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                   placeholder="Enter email">
         </div>
         <button type="button" class="btn btn-primary" onclick="sendGreeting()">Submit</button>
     </form>

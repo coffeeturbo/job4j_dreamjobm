@@ -10,12 +10,12 @@ import java.io.PrintWriter;
 public class GreetingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/plain");
+        resp.setContentType("text/json");
         resp.setCharacterEncoding("UTF-8");
         String name = req.getParameter("name");
         resp.setHeader("Access-Control-Allow-Origin", "*");
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        writer.println(name);
+        writer.println("{\"name\":\"" + name + "\"}");
         writer.flush();
     }
 }
