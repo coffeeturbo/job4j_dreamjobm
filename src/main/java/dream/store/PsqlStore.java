@@ -149,7 +149,7 @@ public class PsqlStore implements Store {
     private User create(User user) {
         try (
                 Connection con = pool.getConnection();
-                PreparedStatement ps = con.prepareStatement("INSERT INTO candidate(name) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS)
+                PreparedStatement ps = con.prepareStatement("INSERT INTO \"user\"(name, email, password) VALUES (?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
@@ -310,7 +310,7 @@ public class PsqlStore implements Store {
         List<User> users = new ArrayList<>();
         try (
                 Connection cn = pool.getConnection();
-                PreparedStatement ps = cn.prepareStatement("SELECT * FROM user")
+                PreparedStatement ps = cn.prepareStatement("SELECT * FROM \"user\"")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -341,7 +341,7 @@ public class PsqlStore implements Store {
     public User findUserById(int id) {
         try (
                 Connection con = pool.getConnection();
-                PreparedStatement ps = con.prepareStatement("SELECT * FROM user WHERE id=(?)")
+                PreparedStatement ps = con.prepareStatement("SELECT * FROM \"user\" WHERE id=(?)")
         ) {
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
@@ -365,7 +365,7 @@ public class PsqlStore implements Store {
     public User findUserByEmail(String email) {
         try (
                 Connection con = pool.getConnection();
-                PreparedStatement ps = con.prepareStatement("SELECT * FROM user WHERE email=(?)")
+                PreparedStatement ps = con.prepareStatement("SELECT * FROM \"user\" WHERE email=(?)")
         ) {
             ps.setString(1, email);
             ResultSet result = ps.executeQuery();
