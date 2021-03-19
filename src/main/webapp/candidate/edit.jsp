@@ -20,6 +20,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <%@include file="../include/js/validation.jsp" %>
     <title>Работа мечты</title>
 </head>
 <body>
@@ -51,7 +52,7 @@
                 <form action="<c:url value="/candidates.do?id=${requestScope.candidate.id}"/>" method="post">
                     <div class="form-group">
                         <label for="nameInput">Имя</label>
-                        <input id="nameInput" type="text" class="form-control" name="name" value="${requestScope.candidate.name}">
+                        <input id="nameInput" type="text" title="Имя" class="form-control required" name="name" value="${requestScope.candidate.name}">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>

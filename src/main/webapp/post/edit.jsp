@@ -18,6 +18,9 @@
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <%@include file="../include/js/validation.jsp" %>
+
     <title>Работа мечты</title>
 </head>
 <body>
@@ -39,7 +42,7 @@
                 <form action="<c:url value="/posts.do?id=${requestScope.post.id}"/>" method="post">
                     <div class="form-group">
                         <label for="nameInput">Имя</label>
-                        <input id="nameInput" type="text" class="form-control" name="name" value="${requestScope.post.name}">
+                        <input id="nameInput" type="text" class="form-control required" title="Имя" name="name" value="${requestScope.post.name}">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
