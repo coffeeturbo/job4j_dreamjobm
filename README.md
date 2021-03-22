@@ -4,6 +4,8 @@
 
 #Dream job 
 
+Site for searching and offering job vacancies
+
 ## Authorize user page
 ![alt text](images/auth_page.png)
 
