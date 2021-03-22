@@ -12,7 +12,7 @@ import java.io.IOException;
 public class EditCandidateAvatarServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Candidate candidate = new Candidate(0, "", 0);
+        Candidate candidate = new Candidate(0, "", 0, 0);
         if (req.getParameter("id") != null) {
             var id = Integer.parseInt(req.getParameter("id"));
             candidate = PsqlStore.instOf().findCandidateById(id);

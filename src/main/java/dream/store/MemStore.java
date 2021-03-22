@@ -1,6 +1,7 @@
 package dream.store;
 
 import dream.model.Candidate;
+import dream.model.City;
 import dream.model.Post;
 import dream.model.User;
 
@@ -101,6 +102,12 @@ public class MemStore implements Store {
             }
         }
 
+        return null;
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
+        // todo write stub
         return null;
     }
 }

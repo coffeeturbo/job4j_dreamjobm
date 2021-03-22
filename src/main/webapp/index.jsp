@@ -32,6 +32,8 @@
                 Сегодняшние вакансии.
             </div>
             <div class="card-body">
+                <%--    Posts list INCLUDE--%>
+                <%@include file="include/postsList.jsp" %>
             </div>
         </div>
     </div><div class="row pt-3">
@@ -40,6 +42,8 @@
             Сегодняшние кандидаты.
         </div>
         <div class="card-body">
+            <%--    Candidates list INCLUDE--%>
+            <%@include file="include/candidatesList.jsp" %>
         </div>
     </div>
 </div>

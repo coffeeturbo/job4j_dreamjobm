@@ -32,25 +32,8 @@
                 Вакансии
             </div>
             <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Названия</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${posts}" var="post">
-                        <tr>
-                            <td>
-                                <a href='<c:url value="/post/edit.do?id=${post.id}"/>'>
-                                    <i class="fa fa-edit mr-3"></i>
-                                </a>
-                                <c:out value="${post.name}"/>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                <%--    Posts list INCLUDE--%>
+                <%@include file="include/postsList.jsp" %>
             </div>
         </div>
     </div>

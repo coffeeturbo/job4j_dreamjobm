@@ -8,7 +8,8 @@ CREATE TABLE candidate
 (
     id   SERIAL PRIMARY KEY,
     name TEXT,
-    photo_id INTEGER
+    photo_id INTEGER,
+    city_id INTEGER
 );
 
 CREATE TABLE photo
@@ -23,4 +24,10 @@ CREATE TABLE "user"
     name TEXT,
     email TEXT,
     password TEXT
+);
+
+CREATE TABLE city
+(
+    id SERIAL PRIMARY KEY,
+    name TEXT
 );

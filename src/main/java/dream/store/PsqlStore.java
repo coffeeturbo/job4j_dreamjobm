@@ -1,6 +1,7 @@
 package dream.store;
 
 import dream.model.Candidate;
+import dream.model.City;
 import dream.model.Post;
 import dream.model.User;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -82,7 +83,8 @@ public class PsqlStore implements Store {
                     candidates.add(new Candidate(
                             it.getInt("id"),
                             it.getString("name"),
-                            it.getInt("photo_id")
+                            it.getInt("photo_id"),
+                            it.getInt("city_id")
                     ));
                 }
             }
@@ -90,6 +92,27 @@ public class PsqlStore implements Store {
             e.printStackTrace();
         }
         return candidates;
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
+        List<City> cities = new ArrayList<>();
+        try (
+                Connection cn = pool.getConnection();
+                PreparedStatement ps = cn.prepareStatement("SELECT * FROM city")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.add(new City(
+                            it.getInt("id"),
+                            it.getString("name")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cities;
     }
 
     @Override
@@ -183,10 +206,14 @@ public class PsqlStore implements Store {
     private void update(Candidate candidate) {
         try (
                 Connection con = pool.getConnection();
-                PreparedStatement statement = con.prepareStatement("UPDATE candidate SET name = ? WHERE id = ?")
+                PreparedStatement statement = con.prepareStatement(
+                        "UPDATE candidate SET name = ?, photo_id = ?, city_id = ?"
+                                + "WHERE id = ?")
         ) {
             statement.setString(1, candidate.getName());
-            statement.setInt(2, candidate.getId());
+            statement.setInt(2, candidate.getPhotoId());
+            statement.setInt(3, candidate.getCityId());
+            statement.setInt(4, candidate.getId());
             statement.executeUpdate();
 
         } catch (Exception throwables) {
@@ -231,7 +258,7 @@ public class PsqlStore implements Store {
     public Candidate findCandidateById(int id) {
         try (
                 Connection con = pool.getConnection();
-                PreparedStatement ps = con.prepareStatement("SELECT id, name, photo_id FROM candidate WHERE id=(?)")
+                PreparedStatement ps = con.prepareStatement("SELECT id, name, photo_id, city_id FROM candidate WHERE id=(?)")
         ) {
             ps.setInt(1, id);
             ResultSet result = ps.executeQuery();
@@ -240,7 +267,8 @@ public class PsqlStore implements Store {
                 return new Candidate(
                         result.getInt(1),
                         result.getString(2),
-                        result.getInt(3)
+                        result.getInt(3),
+                        result.getInt(4)
                 );
             }
         } catch (Exception e) {
